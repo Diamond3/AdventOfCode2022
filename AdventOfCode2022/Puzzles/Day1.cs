@@ -16,8 +16,6 @@ public class Day1 : ISolver
         try
         {
             using var sr = new StreamReader(fileName);
-
-            var goNext = false;
             var tempSum = 0;
 
             while (sr.ReadLine() is string line)
