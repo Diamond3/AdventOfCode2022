@@ -54,9 +54,7 @@ public class Day1 : ISolver
 
     private (int, int, int) AddToTopTrio(int currentVal)
     {
-        var x = topTrio.x;
-        var y = topTrio.y;
-        var z = topTrio.z;
+        var (x, y, z) = topTrio;
 
         if (currentVal > topTrio.z)
         {
