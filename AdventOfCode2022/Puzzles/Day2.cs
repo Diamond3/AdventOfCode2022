@@ -6,9 +6,12 @@ public class Day2 : ISolver
 {
     private string fileName = "Inputs/Day2.txt";
     private int sum = 0;
-    private Dictionary<char, int> dict = new() { { 'X', 1 }, { 'Y', 2 }, { 'Z', 3 } };
-    private HashSet<string> myWinConditions = ["AY", "BZ", "CX"];
-    private HashSet<string> myDrawConditions = ["AX", "BY", "CZ"];
+
+    private static int[] myWinCondition = [2, 3, 1]; // AY, BZ, CX
+    private static int[] myDrawCondition = [1, 2, 3];
+    private static int[] myLoseCondition = [3, 1, 2];
+
+    private Dictionary<char, int[]> dict = new() { { 'X', myLoseCondition }, { 'Y', myDrawCondition }, { 'Z', myWinCondition } };
     public string Solve()
     {
         try
@@ -18,13 +21,10 @@ public class Day2 : ISolver
 
             while (sr.ReadLine() is string line)
             {
-                var opp = line[0];
-                var mine = line[2];
+                var oppScore = line[0] - 'A';
+                var condition = line[2];
 
-                sum += dict[mine];
-                sum += myWinConditions.Contains($"{opp}{mine}") ? 6
-                    : myDrawConditions.Contains($"{opp}{mine}") ? 3
-                    : 0;                
+                sum += dict[condition][oppScore] + (condition - 'X') * 3;                            
             }
         }
         catch (Exception e)

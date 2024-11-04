@@ -27,7 +27,7 @@ class AocClient
         return await response.Content.ReadAsStringAsync();
     }
 
-    public async Task<string> PostAnswerAsync(int day, string answer)
+    public async Task<string> PostAnswerAsync(int day, string answer, int part)
     {
         var url = $"https://adventofcode.com/2022/day/{day}/answer";
 
@@ -35,7 +35,7 @@ class AocClient
         request.Headers.Add("Cookie", cookie);
 
         request.Content = new FormUrlEncodedContent([
-            new KeyValuePair<string, string>("level", "1"),
+            new KeyValuePair<string, string>("level", part.ToString()),
             new KeyValuePair<string, string>("answer", answer)
         ]);
 
