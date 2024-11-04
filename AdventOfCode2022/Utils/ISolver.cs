@@ -2,5 +2,5 @@
 
 public interface ISolver
 {
-    void Solve();
+    string Solve();
 }

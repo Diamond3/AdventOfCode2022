@@ -1,17 +1,15 @@
 ﻿using AdventOfCode2022.Utils;
-using System.Runtime.CompilerServices;
 
 namespace AdventOfCode2022.Puzzles;
 
 public class Day2 : ISolver
 {
-    private string fileName = "Inputs/Day1.txt";
-    private int max = 0;
-    private int trioMin = 0;
-
-    private (int x, int y, int z) topTrio;
-
-    public void Solve()
+    private string fileName = "Inputs/Day2.txt";
+    private int sum = 0;
+    private Dictionary<char, int> dict = new() { { 'X', 1 }, { 'Y', 2 }, { 'Z', 3 } };
+    private HashSet<string> myWinConditions = ["AY", "BZ", "CX"];
+    private HashSet<string> myDrawConditions = ["AX", "BY", "CZ"];
+    public string Solve()
     {
         try
         {
@@ -20,26 +18,13 @@ public class Day2 : ISolver
 
             while (sr.ReadLine() is string line)
             {
-                if (line.Length == 0)
-                {
-                    if (trioMin < tempSum)
-                    {
-                        topTrio = AddToTopTrio(tempSum);
-                        trioMin = topTrio.x;
-                    }
+                var opp = line[0];
+                var mine = line[2];
 
-                    tempSum = 0;
-                }
-                else
-                {
-                    tempSum += int.Parse(line);
-                }
-            }
-
-            if (trioMin < tempSum)
-            {
-                topTrio = AddToTopTrio(tempSum);
-                trioMin = topTrio.x;
+                sum += dict[mine];
+                sum += myWinConditions.Contains($"{opp}{mine}") ? 6
+                    : myDrawConditions.Contains($"{opp}{mine}") ? 3
+                    : 0;                
             }
         }
         catch (Exception e)
@@ -47,29 +32,6 @@ public class Day2 : ISolver
             Console.WriteLine($"An error occurred: {e.Message}");
         }
 
-        Console.WriteLine(topTrio.x + topTrio.y + topTrio.z);
-    }
-
-    private (int, int, int) AddToTopTrio(int currentVal)
-    {
-        var (x, y, z) = topTrio;
-
-        if (currentVal > topTrio.z)
-        {
-            x = y;
-            y = z;
-            z = currentVal;
-        }
-        else if (currentVal > topTrio.y)
-        {
-            x = y;
-            y = currentVal;
-        }
-        else if (currentVal > topTrio.x)
-        {
-            x = currentVal;
-        }
-
-        return (x, y, z);
+        return sum.ToString();
     }
 }

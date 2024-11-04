@@ -10,7 +10,8 @@ try
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
     var configuration = builder.Build();
-
+    var cookie = configuration["AoC:SessionCookie"]!;
+    var aocClient = new AocClient(cookie);
 
     var solversClasses = Assembly.GetExecutingAssembly()
         .GetTypes()
@@ -39,9 +40,6 @@ try
 
     if (!File.Exists(inputPath))
     {
-        var cookie = configuration["AoC:SessionCookie"]!;
-        var aocClient = new AocClient(cookie);
-
         var input = await aocClient.GetDayInputAsJsonAsync(day);
         File.WriteAllText(inputPath, input);
 
@@ -52,7 +50,11 @@ try
 
     Console.WriteLine($"Executing {latestSolver}");
 
-    (Activator.CreateInstance(latestSolver) as ISolver)?.Solve();
+    var answer = (Activator.CreateInstance(latestSolver) as ISolver)?.Solve();
+    Console.WriteLine(answer);
+
+    var response = await aocClient.PostAnswerAsync(day, answer!);
+    Console.WriteLine(response);
 }
 catch (Exception ex)
 {

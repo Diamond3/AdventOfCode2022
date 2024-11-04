@@ -11,7 +11,7 @@ public class Day1 : ISolver
 
     private (int x, int y, int z) topTrio;
 
-    public void Solve()
+    public string Solve()
     {
         try
         {
@@ -47,7 +47,7 @@ public class Day1 : ISolver
             Console.WriteLine($"An error occurred: {e.Message}");
         }
 
-        Console.WriteLine(topTrio.x + topTrio.y + topTrio.z);
+        return (topTrio.x + topTrio.y + topTrio.z).ToString();
     }
 
     private (int, int, int) AddToTopTrio(int currentVal)
