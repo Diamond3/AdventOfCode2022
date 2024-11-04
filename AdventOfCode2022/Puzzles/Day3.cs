@@ -7,22 +7,23 @@ public class Day3 : ISolver
     private string fileName = $"Inputs/{nameof(Day3)}.txt";
     private int sum = 0;
 
-    private HashSet<char> chars = [];
-
     public string Solve()
     {
         try
         {
             using var sr = new StreamReader(fileName);
 
-            while (sr.ReadLine() is string line)
+            while ((sr.ReadLine(), sr.ReadLine(), sr.ReadLine()) is var (x, y, z))
             {
-                string firstHalf = line.Substring(0, line.Length / 2);
-                string secondHalf = line.Substring(line.Length / 2);
+                if (x == null)
+                { 
+                    break;
+                }
 
-                var charSet = firstHalf.ToHashSet();
+                var charSetX = x.ToHashSet();
+                var charSetY = y.ToHashSet();
+                var item = z.FirstOrDefault(z => charSetX.Contains(z) && charSetY.Contains(z));
 
-                var item = secondHalf.FirstOrDefault(charSet.Contains);
                 if (item != default)
                 {
                     sum += item <= 'Z' ? item - 'A' + 27 : item - 'a' + 1;
