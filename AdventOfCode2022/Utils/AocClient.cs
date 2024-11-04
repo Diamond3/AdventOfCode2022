@@ -39,7 +39,7 @@ class AocClient
             new KeyValuePair<string, string>("answer", answer)
         ]);
 
-    var response = await client.SendAsync(request);
+        var response = await client.SendAsync(request);
 
         if (!response.IsSuccessStatusCode)
         {
