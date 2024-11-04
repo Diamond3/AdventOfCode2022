@@ -1,9 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using AdventOfCode2022.Utils;
+using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
 try
 {
+    var builder = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+    var configuration = builder.Build();
+
+
     var solversClasses = Assembly.GetExecutingAssembly()
         .GetTypes()
         .Where(t => typeof(ISolver).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
@@ -19,10 +27,25 @@ try
         .OrderByDescending(x => int.Parse(x.Name.ToLowerInvariant().Replace("day", "")))
         .FirstOrDefault();
 
+
     if (latestSolver == null)
     {
         Console.WriteLine("No valid puzzle solvers found with proper naming.");
         return;
+    }
+
+    var day = int.Parse(latestSolver.Name.ToLowerInvariant().Replace("day", ""));
+    var inputPath = $"Inputs/day{day}.txt";
+
+    if (!File.Exists(inputPath))
+    {
+        var cookie = configuration["AoC:SessionCookie"]!;
+        var aocClient = new AocClient(cookie);
+
+        var input = await aocClient.GetDayInputAsJsonAsync(day);
+        File.WriteAllText(inputPath, input);
+
+        Console.WriteLine("Input file created!");
     }
 
     //latestSolver = typeof(Day1);
