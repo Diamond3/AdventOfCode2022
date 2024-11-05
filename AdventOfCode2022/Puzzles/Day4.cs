@@ -19,7 +19,7 @@ public class Day4 : ISolver
                 var x = splited[0].Split('-').Select(int.Parse).ToArray();
                 var y = splited[1].Split('-').Select(int.Parse).ToArray();
 
-                if ((x[0] >= y[0] && x[1] <= y[1]) || (y[0] >= x[0] && y[1] <= x[1]))
+                if (!((x[0] > y[1] && x[1] > y[1]) || (x[0] < y[0] && x[1] < y[0])))
                 {
                     sum++;
                 }
