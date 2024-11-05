@@ -51,10 +51,14 @@ public class Day5 : ISolver
                     var from = instr[1] - 1;
                     var to = instr[2] - 1;
 
+                    var tempStack = new List<char>();
                     for (int i = 0; i < amount; i++)
                     {
-                        inputStacks[to].Push(inputStacks[from].Pop());
+                        tempStack.Add(inputStacks[from].Pop());
                     }
+
+                    tempStack.Reverse();
+                    tempStack.ForEach(inputStacks[to].Push);
                 }
             }
         }
