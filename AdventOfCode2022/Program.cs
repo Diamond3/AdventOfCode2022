@@ -28,7 +28,6 @@ try
         .OrderByDescending(x => int.Parse(x.Name.ToLowerInvariant().Replace("day", "")))
         .FirstOrDefault();
 
-
     if (latestSolver == null)
     {
         Console.WriteLine("No valid puzzle solvers found with proper naming.");
