@@ -17,11 +17,11 @@ public class Day6 : ISolver
             for (int i = 3; i < str.Length; i++)
             {
                 hashSet.Clear();
-                for (int j = i - 3; j <= i; j++)
+                for (int j = (i >= 13 ? i - 13 : 0); j <= i; j++)
                 {
                     hashSet.Add(str[j]);
                 }
-                if (hashSet.Count == 4)
+                if (hashSet.Count == 14)
                 {
                     return (i + 1).ToString();
                 }
