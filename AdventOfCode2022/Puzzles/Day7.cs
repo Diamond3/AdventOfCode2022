@@ -67,7 +67,7 @@ public class Day7 : ISolver
             var currentFreeSpace = fileSystem - currentNode.Sum;
             var neededSpace = neededSystemSpace - currentFreeSpace;
 
-            // DFS
+            // BFS
             var queue = new Queue<Node>();
             var lowestPossible = long.MaxValue;
 
