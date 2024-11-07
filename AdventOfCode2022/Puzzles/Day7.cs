@@ -7,6 +7,8 @@ public class Day7 : ISolver
     private string fileName = $"Inputs/{nameof(Day7)}.txt";
     private Node tree = new();
     private long sum = 0;
+    private long neededSystemSpace = 30000000L;
+    private long fileSystem = 70000000L;
 
     public string Solve()
     {
@@ -48,12 +50,6 @@ public class Day7 : ISolver
                 else if (command == Commands.Return)
                 {
                     currentNode.Parent.Sum += currentNode.Sum;
-
-                    if (currentNode.Sum <= 100000L)
-                    {
-                        sum += currentNode.Sum;
-                    }
-
                     currentNode = currentNode.Parent;
                 }
                 else if (command == Commands.Other)
@@ -62,25 +58,41 @@ public class Day7 : ISolver
                 }
             }
 
-            if (currentNode.Sum <= 100000L)
+            while (currentNode.Parent != null)
             {
-                sum += currentNode.Sum;
+                currentNode.Parent.Sum += currentNode.Sum;
+                currentNode = currentNode.Parent;
             }
 
-            currentNode.Parent.Sum += currentNode.Sum;
-            currentNode = currentNode.Parent;
+            var currentFreeSpace = fileSystem - currentNode.Sum;
+            var neededSpace = neededSystemSpace - currentFreeSpace;
 
-            if (currentNode.Sum <= 100000L)
+            // DFS
+            var queue = new Queue<Node>();
+            var lowestPossible = long.MaxValue;
+
+            queue.Enqueue(currentNode);
+            while (queue.Count > 0)
             {
-                sum += currentNode.Sum;
+                var node = queue.Dequeue();
+                if (lowestPossible > node.Sum && node.Sum >= neededSpace)
+                {
+                    lowestPossible = node.Sum;
+
+                    foreach (var child in node.Children.Values)
+                    {
+                        queue.Enqueue(child);
+                    }
+                }
             }
+            return lowestPossible.ToString();
         }
         catch (Exception e)
         {
             Console.WriteLine($"An error occurred: {e.Message}");
         }
 
-        return sum.ToString();
+        return "";
     }
 }
 
