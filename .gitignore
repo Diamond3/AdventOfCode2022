@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /AdventOfCode2022/Inputs/
 /AdventOfCode2022/appsettings.json
+/ConsoleApp/ConsoleApp.csproj
