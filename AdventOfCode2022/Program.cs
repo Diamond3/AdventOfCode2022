@@ -52,8 +52,8 @@ try
     var answer = (Activator.CreateInstance(latestSolver) as ISolver)?.Solve();
     Console.WriteLine(answer);
 
-    var response = await aocClient.PostAnswerAsync(day, answer!, 1);
-    Console.WriteLine(response);
+    /*var response = await aocClient.PostAnswerAsync(day, answer!, 2);
+    Console.WriteLine(response);*/
 }
 catch (Exception ex)
 {
