@@ -19,7 +19,8 @@ public class Day9 : ISolver
 
         var visited = new HashSet<Point>();
         var head = new Point(0, 0);
-        var tail = new Point(0, 0);
+
+        var tails = Enumerable.Range(0, 9).Select(_ => new Point(0, 0)).ToArray();
 
         while (sr.ReadLine() is string str)
         {
@@ -29,10 +30,17 @@ public class Day9 : ISolver
             for (var i = 0; i < count; i++)
             {
                 head += dir;
-                tail = GetNextTailPos(head, tail);
-                visited.Add(tail);
+                tails[0] = GetNextTailPos(head, tails[0]);
+
+                for (var j = 1; j < tails.Length; j++)
+                {
+                    tails[j] = GetNextTailPos(tails[j - 1], tails[j]);
+                }
+
+                visited.Add(tails[tails.Length - 1]);
             }
         }
+
         return visited.Count.ToString();
     }
 
