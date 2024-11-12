@@ -1,55 +1,61 @@
 ﻿using AdventOfCode2022.Utils;
+using System.Security;
 
 namespace AdventOfCode2022.Puzzles;
 
 public class Day10 : ISolver
 {
     private string fileName = $"Inputs/{nameof(Day10)}.txt";
+    private int spritePos = 0;
 
     public string Solve()
     {
         using var sr = new StreamReader(fileName);
-        var x = 1L;
+        var x = 1;
         var cycle = 0;
         var sum = 0L;
+        var currentPixel = 0;
 
         while (sr.ReadLine() is string str)
         {
             var command = str.Split(' ')[0];
-            if (command == "noop")
+            var iterations = 1;
+            var num = 0;
+
+            if (command != "noop")
             {
-                cycle++;
-                if ((cycle + 20) % 40 == 0)
+                iterations = 2;
+                num = int.Parse(str.Split(' ')[1]);
+            }
+
+            for (int i = 0; i < iterations; i++)
+            {
+                if (cycle % 40 == 0)
                 {
-                    sum += x * cycle;
-                    Console.WriteLine(cycle);
-                    Console.WriteLine(cycle * x);
                     Console.WriteLine();
                 }
-                continue;
+                PrintPixel(x, cycle);
+                cycle++;
             }
-
-            var num = int.Parse(str.Split(' ')[1]);
-
-            if ((cycle + 21) % 40 == 0)
+            if (iterations == 2)
             {
-                sum += x * (cycle + 1);
-                Console.WriteLine((cycle + 1));
-                Console.WriteLine((cycle + 1) * x);
-                Console.WriteLine();
+                x += num;
             }
-
-            cycle += 2;
-            if ((cycle + 20) % 40 == 0)
-            {
-                sum += x * cycle;
-                Console.WriteLine(cycle);
-                Console.WriteLine(cycle * x);
-                Console.WriteLine();
-            }
-            x += num;
         }
 
         return sum.ToString();
+    }
+
+    private void PrintPixel(int x, int currentPixel)
+    {
+        spritePos = (x - 1);
+        if (currentPixel % 40 == spritePos || currentPixel % 40 == spritePos + 1 || currentPixel % 40 == spritePos + 2)
+        {
+            Console.Write("#");
+        }
+        else
+        {
+            Console.Write(".");
+        }
     }
 }
