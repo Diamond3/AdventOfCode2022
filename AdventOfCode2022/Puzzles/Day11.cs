@@ -1,6 +1,4 @@
 ﻿using AdventOfCode2022.Utils;
-using System.Diagnostics.Contracts;
-using System.Security;
 
 namespace AdventOfCode2022.Puzzles;
 
@@ -8,12 +6,13 @@ public class Day11 : ISolver
 {
     private string fileName = $"Inputs/{nameof(Day11)}.txt";
     private int spritePos = 0;
-    private Dictionary<int, Monkey> monkeys = [];
+    private Dictionary<long, Monkey> monkeys = [];
 
     public string Solve()
     {
         using var sr = new StreamReader(fileName);
         var emptyLines = 0;
+        var mulPrimes = 1L;
 
         while (sr.ReadLine() is string str)
         {
@@ -34,7 +33,7 @@ public class Day11 : ISolver
                 .Split([' ', ':', ','])
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Skip(2)
-                .Select(ulong.Parse)
+                .Select(long.Parse)
                 .ToList();
 
             var operationsLine = sr.ReadLine()!.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -54,12 +53,11 @@ public class Day11 : ISolver
                 }
             };
 
+            mulPrimes *= newMonkey.DivisibleNum;
             monkeys.Add(monkeyNr, newMonkey);
         }
 
-        var currentMonkey = 0;
-
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 10000; i++)
         {
             foreach (var monkey in monkeys.Values)
             {
@@ -70,7 +68,7 @@ public class Day11 : ISolver
                 foreach (var item in monkey.CurrentItems)
                 {
                     var nextMonkey = monkey.NextMonkey[(item % monkey.DivisibleNum) == 0];
-                    monkeys[nextMonkey].NextRoundItems.Add(item);
+                    monkeys[nextMonkey].NextRoundItems.Add(item % mulPrimes);
                 }
                 monkey.CurrentItems.Clear();
             }
@@ -84,17 +82,17 @@ public class Day11 : ISolver
 
 public class Monkey()
 {
-    public List<ulong> CurrentItems = new List<ulong>();
-    public List<ulong> NextRoundItems = new List<ulong>();
+    public List<long> CurrentItems = new List<long>();
+    public List<long> NextRoundItems = new List<long>();
     public string Operation;
     public string OperationNum;
-    public float DivisibleNum;
+    public long DivisibleNum;
     public Dictionary<bool, int> NextMonkey = [];
-    public decimal InspectedItemsCount = 0;
+    public long InspectedItemsCount = 0;
 
-    public ulong Calclulate(ulong x)
+    public long Calclulate(long x)
     {
-        var val = OperationNum == "old" ? x : ulong.Parse(OperationNum);
+        var val = OperationNum == "old" ? x : long.Parse(OperationNum);
 
         if (Operation == "*")
         {

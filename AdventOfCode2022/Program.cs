@@ -35,7 +35,10 @@ try
     }
 
     var day = int.Parse(latestSolver.Name.ToLowerInvariant().Replace("day", ""));
-    var inputPath = $"Inputs/day{day}.txt";
+    var inputDirectory = "Inputs";
+    var inputPath = $"{inputDirectory}/day{day}.txt";
+
+    Directory.CreateDirectory(inputDirectory);
 
     if (!File.Exists(inputPath))
     {
